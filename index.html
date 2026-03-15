@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Legend | Mr Mahmoud Abdelfadeel</title>
+<style>
+body { font-family:'Segoe UI', sans-serif; background:#f4f7f6; color:#333; margin:0; padding:0; }
+header { background:#1a2a6c; color:white; text-align:center; padding:2rem; }
+h1,h2 { margin:0; }
+.container { max-width:900px; margin:2rem auto; padding:0 1rem; }
+.card { background:white; border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+.btn { padding:10px 15px; background:#1a2a6c; color:white; border:none; border-radius:6px; cursor:pointer; margin:3px; }
+.btn:hover { opacity:0.9; }
+.disabled { background:#aaa; cursor:not-allowed; }
+input, file { width:100%; margin:5px 0; padding:8px; border-radius:5px; border:1px solid #ccc; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>The Legend</h1>
+<p>مع <strong>Mr Mahmoud Abdelfadeel</strong> - خبير اللغة الإنجليزية</p>
+</header>
+
+<div class="container">
+
+<!-- قائمة الدروس المدفوعة للتجربة -->
+<div id="paid-lessons" class="card">
+<h2>الدروس المدفوعة</h2>
+<div id="lessons-buttons"></div>
+</div>
+
+<!-- نافذة الدفع -->
+<div id="payment-card" class="card" style="display:none;">
+<h2>ادخل بياناتك للدفع</h2>
+<form id="payment-form">
+<input type="text" id="stu-name" placeholder="الاسم" required>
+<input type="tel" id="stu-phone" placeholder="رقم الهاتف" required>
+<p>رقم التحويل: 01069417804</p>
+<p>المبلغ: <span id="lesson-amount">0</span> جنيه</p>
+<input type="file" id="screenshot" required>
+<button type="submit" class="btn">إرسال</button>
+</form>
+<p id="payment-message"></p>
+<button class="btn" onclick="closePayment()">رجوع</button>
+</div>
+
+</div>
+
+<script>
+// قائمة الدروس المدفوعة مع المبلغ المحدد
+const lessons = [
+{title:"درس اللغة الإنجليزية 1", amount:100},
+{title:"درس اللغة الإنجليزية 2", amount:150},
+{title:"درس اللغة الإنجليزية 3", amount:200}
+];
+
+const lessonsDiv = document.getElementById('lessons-buttons');
+lessons.forEach((lesson,index)=>{
+const btn = document.createElement('button');
+btn.className='btn';
+btn.textContent=lesson.title;
+btn.onclick=()=> openPayment(index);
+lessonsDiv.appendChild(btn);
+});
+
+function openPayment(index){
+document.getElementById('paid-lessons').style.display='none';
+document.getElementById('payment-card').style.display='block';
+document.getElementById('lesson-amount').textContent=lessons[index].amount;
+document.getElementById('payment-form').onsubmit = (e)=> submitPayment(e, index);
+}
+
+function closePayment(){
+document.getElementById('payment-card').style.display='none';
+document.getElementById('paid-lessons').style.display='block';
+document.getElementById('payment-message').textContent='';
+document.getElementById('payment-form').reset();
+}
+
+function submitPayment(e,index){
+e.preventDefault();
+const name = document.getElementById('stu-name').value;
+const phone = document.getElementById('stu-phone').value;
+const file = document.getElementById('screenshot').files[0];
+if(!name || !phone || !file){ alert("يرجى ملء جميع الحقول ورفع السكرين شوت"); return; }
+// توليد ID تلقائي للدرس
+const id = "ID-" + Math.floor(Math.random()*1000000);
+document.getElementById('payment-message').innerHTML=`تم الدفع بنجاح! رقم الوصول الخاص بك: <strong>${id}</strong><br>يمكنك الآن استخدام الدرس في أي وقت`;
+document.getElementById('payment-form').reset();
+}
+
+</script>
+
+</body>
+</html>
